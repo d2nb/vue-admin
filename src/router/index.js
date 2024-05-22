@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/views/home.vue'
+import Layout from '@/layout/index.vue'
+import Dashboard from '@/views/dashboard/index.vue'
 import Login from '@/views/login/index.vue'
 
 const router = createRouter({
@@ -7,8 +8,16 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'layout',
+      component: Layout,
+      redirect: '/dashboard',
+      children: [
+        {
+          path: '/dashboard',
+          name: 'dashboard',
+          component: Dashboard
+        }
+      ]
     },
     {
       path: '/login',
