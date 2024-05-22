@@ -1,21 +1,46 @@
-<template>
-  <div
-    class="h-screen w-full dark:bg-black bg-white dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative flex items-center justify-center"
-  >
-    <div
-      class="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_40%,black)]"
-    ></div>
-    <div class="bg"></div>
-  </div>
-</template>
+<script setup>
+import { GridBackground } from '@/components'
+import logo from '@/assets/logo.svg'
+</script>
 
-<style>
-.bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 102, 153, 0.3) 0, transparent);
-}
-</style>
+<template>
+  <GridBackground>
+    <div
+      class="rounded-xl divide-y divide-gray-200 ring-1 ring-gray-200 shadow w-[400px] bg-white/75 backdrop-blur"
+    >
+      <div class="p-6">
+        <img :src="logo" alt="logo" class="block w-8 mx-auto mb-2" />
+        <div class="text-center text-2xl text-gray-900 font-bold">Welcome back</div>
+        <div class="text-sm text-gray-500 mt-2 text-center">
+          Don't have an account?
+          <span class="text-brand_blue cursor-pointer">Sign up</span>
+        </div>
+        <a-form class="mt-6" layout="vertical">
+          <a-form-item label="Email">
+            <a-input placeholder="Enter your email" />
+          </a-form-item>
+          <a-form-item label="Password">
+            <a-input placeholder="Enter your password" />
+          </a-form-item>
+        </a-form>
+        <a-button class="mt-6" type="primary" block shape="round">
+          Continue
+          <ArrowRightOutlined />
+        </a-button>
+        <a-divider>
+          <span class="text-xs text-gray-500">or</span>
+        </a-divider>
+        <a-button block shape="round">
+          <template #icon>
+            <GithubOutlined class="text-base" />
+          </template>
+          Continue with Github
+        </a-button>
+        <div class="text-sm text-gray-500 mt-6 text-center">
+          By signing in, you agree to our
+          <span class="text-brand_blue cursor-pointer">Terms of Service</span>
+        </div>
+      </div>
+    </div>
+  </GridBackground>
+</template>
