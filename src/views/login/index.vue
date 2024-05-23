@@ -1,6 +1,13 @@
 <script setup>
+import { useRouter } from 'vue-router'
 import { GridBackground } from '@/components'
 import logo from '@/assets/logo.svg'
+
+const router = useRouter()
+
+const handleLogin = () => {
+  router.push('/dashboard')
+}
 </script>
 
 <template>
@@ -23,7 +30,7 @@ import logo from '@/assets/logo.svg'
             <a-input placeholder="Enter your password" />
           </a-form-item>
         </a-form>
-        <a-button class="mt-6" type="primary" block shape="round">
+        <a-button class="mt-6" type="primary" block shape="round" @click="handleLogin">
           Continue
           <ArrowRightOutlined />
         </a-button>
