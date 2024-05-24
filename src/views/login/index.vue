@@ -1,12 +1,54 @@
 <script setup>
+import { reactive, toRaw } from 'vue'
+import { Form } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { GridBackground } from '@/components'
-import logo from '@/assets/logo.svg'
+import { storage } from '@/utils'
+import appConfig from '@/config'
+import { login } from '@/api'
 
 const router = useRouter()
 
-const handleLogin = () => {
-  router.push('/dashboard')
+const formData = reactive({
+  login_type: 1,
+  user_name: undefined,
+  password: undefined,
+  mfa_code: undefined
+})
+
+const rules = reactive({
+  user_name: [
+    {
+      required: true,
+      message: '请输入账号'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入密码'
+    }
+  ]
+  // mfa_code: [
+  //   {
+  //     required: true,
+  //     message: '请输入验证码'
+  //   }
+  // ]
+})
+
+const { validate, validateInfos } = Form.useForm(formData, rules)
+
+const handleLogin = async () => {
+  try {
+    await validate()
+    const { data } = await login(toRaw(formData))
+    storage.set(appConfig.TOKEN_KEY, data.session)
+    storage.set(appConfig.USER_KEY, data.userInfo)
+    router.push('/dashboard')
+  } catch (error) {
+    console.log(error)
+  }
 }
 </script>
 
@@ -16,37 +58,25 @@ const handleLogin = () => {
       class="rounded-xl divide-y divide-gray-200 ring-1 ring-gray-200 shadow w-[400px] bg-white/75 backdrop-blur"
     >
       <div class="p-6">
-        <img :src="logo" alt="logo" class="block w-8 mx-auto mb-2" />
-        <div class="text-center text-2xl text-gray-900 font-bold">Welcome back</div>
-        <div class="text-sm text-gray-500 mt-2 text-center">
-          Don't have an account?
-          <span class="text-brand_blue cursor-pointer">Sign up</span>
-        </div>
-        <a-form class="mt-6" layout="vertical">
-          <a-form-item label="Email">
-            <a-input placeholder="Enter your email" />
+        <div class="text-3xl text-gray-900 font-bold mb-2">Hello Jelly</div>
+        <div class="text-sm text-gray-500 mb-6">心灵伴侣，不止在梦里</div>
+        <a-form>
+          <a-form-item v-bind="validateInfos.user_name">
+            <a-input v-model:value="formData.user_name" placeholder="请输入账号" />
           </a-form-item>
-          <a-form-item label="Password">
-            <a-input placeholder="Enter your password" />
+          <a-form-item v-bind="validateInfos.password">
+            <a-input-password v-model:value="formData.password" placeholder="请输入密码" />
+          </a-form-item>
+          <!-- <a-form-item v-bind="validateInfos.mfa_code">
+            <a-input v-model:value="formData.mfa_code" placeholder="请输入验证码" />
+          </a-form-item> -->
+          <a-form-item class="text-right !mb-0">
+            <a-button html-type="submit" type="primary" shape="round" @click="handleLogin">
+              <span>登录</span>
+              <RightOutlined />
+            </a-button>
           </a-form-item>
         </a-form>
-        <a-button class="mt-6" type="primary" block shape="round" @click="handleLogin">
-          Continue
-          <ArrowRightOutlined />
-        </a-button>
-        <a-divider>
-          <span class="text-xs text-gray-500">or</span>
-        </a-divider>
-        <a-button block shape="round">
-          <template #icon>
-            <GithubOutlined class="text-base" />
-          </template>
-          Continue with Github
-        </a-button>
-        <div class="text-sm text-gray-500 mt-6 text-center">
-          By signing in, you agree to our
-          <span class="text-brand_blue cursor-pointer">Terms of Service</span>
-        </div>
       </div>
     </div>
   </GridBackground>

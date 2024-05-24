@@ -1,3 +1,14 @@
+<script setup>
+import { storage } from '@/utils'
+
+const handleLogout = () => {
+  storage.clear()
+  setTimeout(() => {
+    location.href = '/login'
+  }, 0)
+}
+</script>
+
 <template>
   <div class="flex items-center h-full px-6 border-b">
     <a-breadcrumb>
@@ -12,13 +23,13 @@
             <UserOutlined />
           </template>
         </a-avatar>
-        <span class="ml-2 text-gray-500">Tony</span>
+        <span class="ml-2 text-gray-500">小明</span>
       </div>
 
       <template #overlay>
         <a-menu>
           <a-menu-item>个人中心</a-menu-item>
-          <a-menu-item>退出登录</a-menu-item>
+          <a-menu-item @click="handleLogout">退出登录</a-menu-item>
         </a-menu>
       </template>
     </a-dropdown>
