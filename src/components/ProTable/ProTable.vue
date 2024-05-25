@@ -22,6 +22,8 @@ const tableKeys = props.columns.map((item) => ({
 }))
 
 const propColumns = props.columns.map((item) => {
+  // 产品要求所有列都可以拖动调整宽度，
+  // 但设置 resizable 必须设置 width，所以默认设置为 Infinity
   return {
     width: Infinity,
     minWidth: 100,
